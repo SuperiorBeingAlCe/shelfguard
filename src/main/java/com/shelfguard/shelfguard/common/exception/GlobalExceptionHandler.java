@@ -8,38 +8,45 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-	  @ExceptionHandler(NotFoundException.class)
-	    public ResponseEntity<ApiError> handleNotFound(
-	            NotFoundException ex,
-	            HttpServletRequest request) {
 
-	        ApiError error = new ApiError(
-	                LocalDateTime.now(),
-	                404,
-	                "NOT_FOUND",
-	                ex.getMessage(),
-	                request.getRequestURI()
-	        );
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiError> handleBusiness(
+            BusinessException ex,
+            HttpServletRequest request) {
 
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-	    }
+        BusinessErrorCode code = ex.getErrorCode();
 
-	    @ExceptionHandler(Exception.class)
-	    public ResponseEntity<ApiError> handleGeneric(
-	            Exception ex,
-	            HttpServletRequest request) {
+        ApiError error = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                String.valueOf(code.getCode()),   // business code
+                code.getMessage(),
+                request.getRequestURI()
+        );
 
-	        ApiError error = new ApiError(
-	                LocalDateTime.now(),
-	                500,
-	                "INTERNAL_ERROR",
-	                ex.getMessage(),
-	                request.getRequestURI()
-	        );
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(error);
+    }
 
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-	    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleGeneric(
+            Exception ex,
+            HttpServletRequest request) {
+
+        ApiError error = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "INTERNAL_ERROR",
+                "Unexpected error occurred",
+                request.getRequestURI()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(error);
+    }
 }
