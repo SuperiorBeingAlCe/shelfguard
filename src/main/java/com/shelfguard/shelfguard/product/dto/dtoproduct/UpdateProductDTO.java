@@ -1,4 +1,4 @@
-package com.shelfguard.shelfguard.product.dtoproduct;
+package com.shelfguard.shelfguard.product.dto.dtoproduct;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
