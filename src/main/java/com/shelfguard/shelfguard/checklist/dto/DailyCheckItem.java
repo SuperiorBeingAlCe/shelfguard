@@ -4,11 +4,13 @@ import java.time.LocalDate;
 
 import com.shelfguard.shelfguard.risk.RiskLevel;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class DailyCheckItem {
 	
 	private String productName;
