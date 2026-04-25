@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ChecklistService {
 
-	private RiskService riskService;
+	private final RiskService riskService;
 	
 	public List<DailyCheckItem> generateTodayChecklist() {
 		
